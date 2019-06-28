@@ -5,14 +5,27 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +44,46 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
                 final TextView textView = findViewById(R.id.main_textview);
-                textView.setText(R.string.test_ting);
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                String url ="https://api.thetvdb.com/login";
+
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("apikey", "***REMOVED***");
+                    obj.put("username", "***REMOVED***");
+                    obj.put("userkey", "***REMOVED***");
+                } catch (Exception ex) {
+                    //idk fam
+                }
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,
+                        obj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // Display the first 500 characters of the response string.
+                                textView.setText("Response is: "+ response.toString().substring(0,500));
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley: ", error.toString());
+                    }
+                })
+                {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("Content-Type", "application/json");
+                        params.put("Accept", "application/json");
+
+                        return params;
+                    }
+                };
+
+// Add the request to the RequestQueue.
+                queue.add(jsonObjectRequest);
             }
         });
     }
