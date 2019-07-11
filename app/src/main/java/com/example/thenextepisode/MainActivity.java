@@ -68,8 +68,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                                .edit().putString("APIKEY", response.toString()).apply();
+                        try {
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                    .edit().putString("APIKEY", response.getString("token")).apply();
+                        } catch (Exception ex) {
+                            Log.e("Response error: ", ex.toString());
+                        }
+
+                        Log.d("Pref", PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                .getString("APIKEY", ""));
                     }
                 }, new Response.ErrorListener() {
             @Override
