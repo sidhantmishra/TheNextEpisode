@@ -1,5 +1,6 @@
 package com.example.thenextepisode;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -37,75 +38,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        ApiHelper.getAPIKeyAndPutIntoSharedPreferences(getApplicationContext());
+
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                getAPIKey();
+                Intent intent = new Intent(this, AddTvShow.class);
 
             }
-        });
+        });*/
     }
 
-    private void getAPIKey() {
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url ="https://api.thetvdb.com/login";
-
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("apikey", "RT0MXLTGH5I2KRJZ");
-            obj.put("username", "sdhntmshr1fc");
-            obj.put("userkey", "TYZFJ4U3OOWK0N4L");
-        } catch (Exception ex) {
-            Log.e("Couldn't put an object? ", ex.toString());
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,
-                obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Display the first 500 characters of the response string.
-                        try {
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                                    .edit().putString("APIKEY", response.getString("token")).apply();
-                        } catch (Exception ex) {
-                            Log.e("Response error: ", ex.toString());
-                        }
-
-                        Log.d("Pref", PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                                .getString("APIKEY", ""));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley: ", error.toString());
-            }
-        })
-        {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
-                params.put("Accept", "application/json");
-
-                return params;
-            }
-        };
-
-// Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest);
-    }
-
-    public void initConnection() throws IOException {
-        URL url = new URL("http://example.com");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-
-
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -126,5 +70,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addTvShow(View view) {
+        Intent intent = new Intent(getApplicationContext(), AddTvShow.class);
+        startActivity(intent);
     }
 }
