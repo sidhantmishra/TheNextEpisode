@@ -1,6 +1,7 @@
 package com.example.thenextepisode;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,50 +43,53 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                getAPIKey();
 
-                final TextView textView = findViewById(R.id.main_textview);
-                // Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                String url ="https://api.thetvdb.com/login";
-
-                JSONObject obj = new JSONObject();
-                try {
-                    obj.put("apikey", "***REMOVED***");
-                    obj.put("username", "***REMOVED***");
-                    obj.put("userkey", "***REMOVED***");
-                } catch (Exception ex) {
-                    //idk fam
-                }
-
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,
-                        obj,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                // Display the first 500 characters of the response string.
-                                textView.setText("Response is: "+ response.toString().substring(0,500));
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley: ", error.toString());
-                    }
-                })
-                {
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("Content-Type", "application/json");
-                        params.put("Accept", "application/json");
-
-                        return params;
-                    }
-                };
-
-// Add the request to the RequestQueue.
-                queue.add(jsonObjectRequest);
             }
         });
+    }
+
+    private void getAPIKey() {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url ="https://api.thetvdb.com/login";
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("apikey", "***REMOVED***");
+            obj.put("username", "***REMOVED***");
+            obj.put("userkey", "***REMOVED***");
+        } catch (Exception ex) {
+            Log.e("Couldn't put an object? ", ex.toString());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,
+                obj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Display the first 500 characters of the response string.
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                .edit().putString("APIKEY", response.toString()).apply();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley: ", error.toString());
+            }
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Accept", "application/json");
+
+                return params;
+            }
+        };
+
+// Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
     }
 
     public void initConnection() throws IOException {
