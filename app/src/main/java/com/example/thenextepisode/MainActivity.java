@@ -39,15 +39,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ApiHelper.getAPIKeyAndPutIntoSharedPreferences(getApplicationContext());
-
-        /*FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(this, AddTvShow.class);
-
-            }
-        });*/
     }
 
     @Override
