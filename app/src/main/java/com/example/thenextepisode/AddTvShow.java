@@ -1,6 +1,7 @@
 package com.example.thenextepisode;
 
 import android.app.SearchManager;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import java.util.List;
 
 public class AddTvShow extends AppCompatActivity {
 
@@ -29,14 +32,30 @@ public class AddTvShow extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        setIntent(intent);
         handleIntent(intent);
     }
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            //now we send this to the API
+            Log.d("query", query);
+
+            AppDatabase database = Room.databaseBuilder(this, AppDatabase.class, "db-contacts")
+                    .allowMainThreadQueries()   //Allows room to do operation on main thread
+                    .build();
+
+            ShowDao dao = database.getShowDao();
+            //TODO: Delete this hacky shit
+            if (query.equals("deleteAll")) {
+                dao.deleteAllShows();
+            } else {
+                dao.insert(new Show(query));
+
+                List<Show> shows = dao.getAllShows();
+                for (Show show : shows) {
+                    Log.d("show", show.getShowName());
+                }
+            }
         }
     }
 
