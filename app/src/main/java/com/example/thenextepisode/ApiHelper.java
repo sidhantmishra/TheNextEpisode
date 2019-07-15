@@ -23,9 +23,10 @@ public class ApiHelper {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("apikey", "***REMOVED***");
-            obj.put("username", "***REMOVED***");
-            obj.put("userkey", "***REMOVED***");
+            //you'll need to obtain your own apikey/username/userkey to build this yourself ;)
+            obj.put("apikey", R.string.apikey);
+            obj.put("username", R.string.username);
+            obj.put("userkey", R.string.userkey);
         } catch (Exception ex) {
             Log.e("Couldn't put an object? ", ex.toString());
         }
@@ -69,9 +70,9 @@ public class ApiHelper {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("apikey", "***REMOVED***");
-            obj.put("username", "***REMOVED***");
-            obj.put("userkey", "***REMOVED***");
+            obj.put("apikey", R.string.apikey);
+            obj.put("username", R.string.username);
+            obj.put("userkey", R.string.userkey);
         } catch (Exception ex) {
             Log.e("Couldn't put an object? ", ex.toString());
         }
