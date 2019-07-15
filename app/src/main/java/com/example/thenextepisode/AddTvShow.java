@@ -40,9 +40,7 @@ public class AddTvShow extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.d("query", query);
 
-            AppDatabase database = Room.databaseBuilder(this, AppDatabase.class, "db-contacts")
-                    .allowMainThreadQueries()   //Allows room to do operation on main thread
-                    .build();
+            AppDatabase database = AppDatabase.getAppDatabase(this);
 
             ShowDao dao = database.getShowDao();
             //TODO: Delete this hacky shit
