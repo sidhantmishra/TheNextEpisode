@@ -103,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
 
         List<Show> shows = dao.getAllShows();
 
-        /*for(Show show : dao.getAllShows()) {
+        for(Show show : dao.getAllShows()) {
             employeeList.add(createEmployee("employees", show.getShowName()));
         }
         Log.d("size", String.valueOf(employeeList.size()));
-        */
+
     }
 
     private HashMap<String, String>createEmployee(String name,String number){
