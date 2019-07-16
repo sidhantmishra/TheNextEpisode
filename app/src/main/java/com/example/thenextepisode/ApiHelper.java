@@ -24,9 +24,9 @@ public class ApiHelper {
         JSONObject obj = new JSONObject();
         try {
             //you'll need to obtain your own apikey/username/userkey to build this yourself ;)
-            obj.put("apikey", R.string.apikey);
-            obj.put("username", R.string.username);
-            obj.put("userkey", R.string.userkey);
+            obj.put("apikey", context.getResources().getString(R.string.apikey));
+            obj.put("username", context.getResources().getString(R.string.username));
+            obj.put("userkey", context.getResources().getString(R.string.userkey));
         } catch (Exception ex) {
             Log.e("Couldn't put an object? ", ex.toString());
         }
@@ -48,7 +48,7 @@ public class ApiHelper {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley: ", error.toString());
+                Log.e("Volley", error.toString());
             }
         })
         {
@@ -70,9 +70,10 @@ public class ApiHelper {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("apikey", R.string.apikey);
-            obj.put("username", R.string.username);
-            obj.put("userkey", R.string.userkey);
+            //you'll need to obtain your own apikey/username/userkey to build this yourself ;)
+            obj.put("apikey", context.getResources().getString(R.string.apikey));
+            obj.put("username", context.getResources().getString(R.string.username));
+            obj.put("userkey", context.getResources().getString(R.string.userkey));
         } catch (Exception ex) {
             Log.e("Couldn't put an object? ", ex.toString());
         }
