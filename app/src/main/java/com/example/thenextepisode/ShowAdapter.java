@@ -25,6 +25,7 @@ public class ShowAdapter extends ArrayAdapter<Show> {
         }
 
         TextView showName = convertView.findViewById(R.id.show_name);
+        showName.setText(show.getShowName());
         return convertView;
     }
 }
