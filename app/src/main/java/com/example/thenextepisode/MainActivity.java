@@ -6,20 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<Show> showList = new ArrayList<Show>();
+    List<Show> showList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public void setListAdapter() {
         showList.clear();
         initList();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.show_list);
+        RecyclerView recyclerView = findViewById(R.id.show_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -82,19 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private void initList(){
         AppDatabase db = AppDatabase.getAppDatabase(this);
         ShowDao dao = db.getShowDao();
-
         showList = dao.getAllShows();
-
-        /*for(Show show : dao.getAllShows()) {
-            showList.add(createEmployee("employees", show.getShowName()));
-        }
-        Log.d("size", String.valueOf(showList.size()));*/
-
-    }
-
-    private HashMap<String, String>createEmployee(String name,String number){
-        HashMap<String, String> employeeNameNo = new HashMap<String, String>();
-        employeeNameNo.put(name, number);
-        return employeeNameNo;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.thenextepisode;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -11,11 +10,11 @@ public class Show {
     @NonNull
     private String showName;
 
-    public Show (String showName) {
+    Show (String showName) {
         this.showName = showName;
     }
 
-    public String getShowName() {
+    String getShowName() {
         return showName;
     }
 

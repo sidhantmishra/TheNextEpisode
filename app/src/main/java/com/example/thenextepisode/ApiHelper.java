@@ -4,21 +4,17 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApiHelper {
+class ApiHelper {
 
 
     static void getAPIKeyAndPutIntoSharedPreferences(final Context context) {
@@ -57,7 +53,7 @@ public class ApiHelper {
         {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 params.put("Accept", "application/json");
 
@@ -69,10 +65,10 @@ public class ApiHelper {
     }
 
     static void searchForTvShow(final Context context, final String tvShow) {
-        String url = "https://api.thetvdb.com/search/series?";
+        String url = "https://api.thetvdb.com/search/series";
         Map<String, String> params = new HashMap<>();
         params.put("name", tvShow);
-        url+=encodeParametersIntoUrl(params);
+        url+=addParametersIntoUrl(params);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
                 null,
@@ -81,7 +77,7 @@ public class ApiHelper {
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
                         try {
-                            Log.d("tvshow", response.toString());
+                            Log.d("tv show", response.toString());
                         } catch (Exception ex) {
                             Log.e("Response error: ", ex.toString());
                         }
@@ -109,34 +105,22 @@ public class ApiHelper {
         RequestQueueSingleton.getInstance(context).getRequestQueue().add(jsonObjectRequest);
     }
 
-    private static String encodeParametersIntoUrl(Map<String, String> params) {
+    private static String addParametersIntoUrl(Map<String, String> params) {
         if (params != null && params.size() > 0) {
-            return encodeParameters(params, "UTF-8");
+            return addParameters(params);
         }
         return null;
     }
 
-    /** Converts <code>params</code> into an application/x-www-form-urlencoded encoded string. */
-    private static String encodeParameters(Map<String, String> params, String paramsEncoding) {
-        StringBuilder encodedParams = new StringBuilder();
-        try {
+    private static String addParameters(Map<String, String> params) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("?");
             for (Map.Entry<String, String> entry : params.entrySet()) {
-                if (entry.getKey() == null || entry.getValue() == null) {
-                    throw new IllegalArgumentException(
-                            String.format(
-                                    "Request#getParams() or Request#getPostParams() returned a map "
-                                            + "containing a null key or value: (%s, %s). All keys "
-                                            + "and values must be non-null.",
-                                    entry.getKey(), entry.getValue()));
-                }
-                encodedParams.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
-                encodedParams.append('=');
-                encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
-                encodedParams.append('&');
+                stringBuilder.append(entry.getKey());
+                stringBuilder.append('=');
+                stringBuilder.append(entry.getValue());
+                stringBuilder.append('&');
             }
-            return encodedParams.toString();
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
-        }
+            return stringBuilder.toString();
     }
 }

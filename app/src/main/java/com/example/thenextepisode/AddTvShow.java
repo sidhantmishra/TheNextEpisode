@@ -1,7 +1,6 @@
 package com.example.thenextepisode;
 
 import android.app.SearchManager;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
