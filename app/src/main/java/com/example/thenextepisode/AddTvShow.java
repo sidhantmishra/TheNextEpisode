@@ -6,20 +6,28 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddTvShow extends AppCompatActivity {
+
+    List<Show> showList = new ArrayList<>();
+    ShowAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_tv_show);
+
+        setListAdapter();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -27,6 +35,17 @@ public class AddTvShow extends AppCompatActivity {
         }
 
         handleIntent(getIntent());
+    }
+
+    public void setListAdapter() {
+        showList.clear();
+        RecyclerView recyclerView = findViewById(R.id.add_new_show_list);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+        adapter = new ShowAdapter(showList);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -49,6 +68,10 @@ public class AddTvShow extends AppCompatActivity {
             if (query.equals("deleteAll")) {
                 dao.deleteAllShows();
             } else {
+                showList.clear();
+                showList.add(new Show(query));
+                adapter.notifyDataSetChanged();
+
                 dao.insert(new Show(query));
 
                 List<Show> shows = dao.getAllShows();

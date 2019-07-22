@@ -75,7 +75,6 @@ class ApiHelper {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Display the first 500 characters of the response string.
                         try {
                             Log.d("tv show", response.toString());
                         } catch (Exception ex) {
