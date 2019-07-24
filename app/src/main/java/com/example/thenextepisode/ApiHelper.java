@@ -9,9 +9,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class ApiHelper {
@@ -64,7 +66,8 @@ class ApiHelper {
         RequestQueueSingleton.getInstance(context).getRequestQueue().add(jsonObjectRequest);
     }
 
-    static void searchForTvShow(final Context context, final String tvShow) {
+    static void searchForTvShow(final Context context, final String tvShow, final ShowAdapter adapter,
+                                final List<Show> showList) {
         String url = "https://api.thetvdb.com/search/series";
         Map<String, String> params = new HashMap<>();
         params.put("name", tvShow);
@@ -76,6 +79,15 @@ class ApiHelper {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            showList.clear();
+                            JSONArray series = response.getJSONArray("data");
+                            for (int i = 0; i < series.length(); i++) {
+                                showList.add(new Show(series.getJSONObject(i)
+                                        .getString("seriesName")));
+                            }
+                            showList.add(new Show(""));
+                            adapter.notifyDataSetChanged();
+
                             Log.d("tv show", response.toString());
                         } catch (Exception ex) {
                             Log.e("Response error: ", ex.toString());

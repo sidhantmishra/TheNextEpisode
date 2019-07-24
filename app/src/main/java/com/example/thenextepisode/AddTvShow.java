@@ -63,14 +63,11 @@ public class AddTvShow extends AppCompatActivity {
             ShowDao dao = database.getShowDao();
             //TODO: Delete this hacky shit
 
-            ApiHelper.searchForTvShow(getApplicationContext(), query);
+            ApiHelper.searchForTvShow(getApplicationContext(), query, adapter, showList);
 
             if (query.equals("deleteAll")) {
                 dao.deleteAllShows();
             } else {
-                showList.clear();
-                showList.add(new Show(query));
-                adapter.notifyDataSetChanged();
 
                 dao.insert(new Show(query));
 
