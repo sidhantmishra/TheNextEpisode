@@ -66,7 +66,9 @@ class ApiHelper {
         RequestQueueSingleton.getInstance(context).getRequestQueue().add(jsonObjectRequest);
     }
 
-    static void searchForTvShow(final Context context, final String tvShow, final ShowAdapter adapter,
+    static void searchForTvShow(final Context context,
+                                final String tvShow,
+                                final ShowAdapter adapter,
                                 final List<Show> showList) {
         String url = "https://api.thetvdb.com/search/series";
         Map<String, String> params = new HashMap<>();

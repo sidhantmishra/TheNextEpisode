@@ -1,5 +1,6 @@
 package com.example.thenextepisode;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -10,8 +11,16 @@ public class Show {
     @NonNull
     private String showName;
 
+    @ColumnInfo(name = "desc")
+    public String description;
+
     Show (String showName) {
+        this(showName,"");
+    }
+
+    Show (String showName, String desc) {
         this.showName = showName;
+        this.description = desc;
     }
 
     String getShowName() {
